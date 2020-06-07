@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +20,6 @@ namespace Pseudo_MD_DoC_API
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            /*var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettingsDevelopment.json")
-                .Build();*/
         }
 
         public IConfiguration Configuration { get; }
@@ -32,7 +27,7 @@ namespace Pseudo_MD_DoC_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(""));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             services.AddControllers();
         }
