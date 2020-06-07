@@ -8,6 +8,7 @@ namespace Pseudo_MD_DoC_API.Applications
 {
     public class Employment
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -16,11 +17,11 @@ namespace Pseudo_MD_DoC_API.Applications
         [Required]
         public DateTime StartDate { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
-        
+        public DateTime? EndDate { get; set; }
+
         [Phone]
-        public PhoneAttribute phone { get; set; }
+        [Required]
+        public string phone { get; set; }
 
         [Required]
         public string Position { get; set; }

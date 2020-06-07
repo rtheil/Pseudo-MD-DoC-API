@@ -8,6 +8,7 @@ namespace Pseudo_MD_DoC_API.Applications
 {
     public class Education
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -17,8 +18,7 @@ namespace Pseudo_MD_DoC_API.Applications
         [Required]
         public DateTime StartDate { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Required]
         [StringLength(50)]
