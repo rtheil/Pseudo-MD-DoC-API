@@ -89,5 +89,9 @@ namespace Pseudo_MD_DoC_API.Applications
             References = new Collection<Reference>();
         }
 
+        //PROCESS DATES
+        //public DateTime DateReceived { get; set; }
+        //public DateTime? DateProcessed { get; set; }
+
     }
 }

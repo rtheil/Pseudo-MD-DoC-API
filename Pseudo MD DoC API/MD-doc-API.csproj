@@ -4,6 +4,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Pseudo_MD_DoC_API</RootNamespace>
+    <UserSecretsId>ec9ce847-e07a-4d7d-98fb-c2d8d8647421</UserSecretsId>
     <!--<Nullable>enable</Nullable>-->
   </PropertyGroup>
   

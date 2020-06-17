@@ -25,7 +25,6 @@ namespace Pseudo_MD_DoC_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Application>>> GetApplications()
         {
-            //return await _context.Applications.ToListAsync();
             return await _context.Applications
                 .Include(edu => edu.Education)
                 .Include(r => r.References)

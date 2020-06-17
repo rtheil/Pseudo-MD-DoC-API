@@ -16,7 +16,19 @@ namespace Pseudo_MD_DoC_API.Applications
 
         [Phone]
         [Required]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber 
+        {
+            /*
+            get 
+            {
+                string outPhone = String.Format("{0:###-###-####}", PhoneNumber);
+                return outPhone; 
+            }
+            set { PhoneNumber = value; } 
+            */
+            get;
+            set;
+        }
 
         public string Relation { get; set; }
     }
