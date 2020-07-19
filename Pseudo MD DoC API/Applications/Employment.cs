@@ -21,7 +21,7 @@ namespace Pseudo_MD_DoC_API.Applications
 
         [Phone]
         [Required]
-        public string phone { get; set; }
+        public string Phone { get; set; }
 
         [Required]
         public string Position { get; set; }

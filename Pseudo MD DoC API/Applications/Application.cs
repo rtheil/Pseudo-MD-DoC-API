@@ -53,10 +53,10 @@ namespace Pseudo_MD_DoC_API.Applications
 
         [Required]
         [StringLength(255)]
-        public string EMailAddress { get; set; }
+        public string EMailAddress { get; set; } //TODO: REMOVE BECAUSE USER ACCOUNT HAS THIS
 
         [Required]
-        [StringLength(11)]
+        [StringLength(9)]
         public string SocialSecurityNumber { get; set; }
 
         [Required]
@@ -71,7 +71,7 @@ namespace Pseudo_MD_DoC_API.Applications
         //ONE-TO-MANY ITEMS
         public ICollection<Education> Education { get; set; }
 
-        public ICollection<Employment> EmploymentHistory { get; set; }
+        public ICollection<Employment> Employment { get; set; }
 
         public ICollection<Reference> References { get; set; }
 
@@ -85,12 +85,13 @@ namespace Pseudo_MD_DoC_API.Applications
         public Application()
         {
             Education = new Collection<Education>();
-            EmploymentHistory = new Collection<Employment>();
+            Employment = new Collection<Employment>();
             References = new Collection<Reference>();
         }
 
         //PROCESS DATES
-        //public DateTime DateReceived { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime DateReceived { get; set; }
         //public DateTime? DateProcessed { get; set; }
 
     }

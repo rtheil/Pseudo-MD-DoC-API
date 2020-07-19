@@ -28,7 +28,7 @@ namespace Pseudo_MD_DoC_API.Controllers
             return await _context.Applications
                 .Include(edu => edu.Education)
                 .Include(r => r.References)
-                .Include(emp => emp.EmploymentHistory)
+                .Include(emp => emp.Employment)
                 .ToListAsync();
         }
 
@@ -40,7 +40,7 @@ namespace Pseudo_MD_DoC_API.Controllers
             var application = await _context.Applications
                 .Include(edu => edu.Education)
                 .Include(r => r.References)
-                .Include(emp => emp.EmploymentHistory)
+                .Include(emp => emp.Employment)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
 

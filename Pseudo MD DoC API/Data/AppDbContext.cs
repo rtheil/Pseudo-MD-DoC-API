@@ -15,6 +15,7 @@ namespace Pseudo_MD_DoC_API.Persistence
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+            
         }
 
     }
