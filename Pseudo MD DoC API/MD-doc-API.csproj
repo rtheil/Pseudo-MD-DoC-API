@@ -32,10 +32,33 @@
     <Compile Remove="Migrations\20200607044745_AddUsers.Designer.cs" />
     <Compile Remove="Migrations\20200607044958_AddUsers.cs" />
     <Compile Remove="Migrations\20200607044958_AddUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200719234646_edit-users.cs" />
+    <Compile Remove="Migrations\20200719234646_edit-users.Designer.cs" />
+    <Compile Remove="Migrations\20200719234948_users.cs" />
+    <Compile Remove="Migrations\20200719234948_users.Designer.cs" />
+    <Compile Remove="Migrations\20200719235147_add-users.cs" />
+    <Compile Remove="Migrations\20200719235147_add-users.Designer.cs" />
+    <Compile Remove="Migrations\20200720010947_add-users.cs" />
+    <Compile Remove="Migrations\20200720010947_add-users.Designer.cs" />
+    <Compile Remove="Migrations\20200720030145_admin-user.cs" />
+    <Compile Remove="Migrations\20200720030145_admin-user.Designer.cs" />
+    <Compile Remove="Migrations\20200720030559_admin-user.cs" />
+    <Compile Remove="Migrations\20200720030559_admin-user.Designer.cs" />
+    <Compile Remove="Migrations\20200720030717_admin-user.cs" />
+    <Compile Remove="Migrations\20200720030717_admin-user.Designer.cs" />
+    <Compile Remove="Migrations\20200720030833_user-password.cs" />
+    <Compile Remove="Migrations\20200720030833_user-password.Designer.cs" />
+    <Compile Remove="Migrations\20200720031019_user-password-1.cs" />
+    <Compile Remove="Migrations\20200720031019_user-password-1.Designer.cs" />
+    <Compile Remove="Migrations\20200720031358_add-users.cs" />
+    <Compile Remove="Migrations\20200720031358_add-users.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="BCrypt-Core" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4">
       <PrivateAssets>all</PrivateAssets>
@@ -50,6 +73,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
   </ItemGroup>
 
 

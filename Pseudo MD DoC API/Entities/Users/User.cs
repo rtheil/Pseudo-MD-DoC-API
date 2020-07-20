@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,12 +24,13 @@ namespace Pseudo_MD_DoC_API.Users
         //protected string StoredPassword { get; set; }
 
         [Required]
-        public string HashedPassword { get; set; }
+        public byte[] PasswordHash { get; set; }
 
         [Required]
-        public string PasswordSalt { get; set; }
+        public byte[] PasswordSalt { get; set; }
 
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool Administrator { get; set; }
     }
 }
