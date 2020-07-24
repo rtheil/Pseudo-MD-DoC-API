@@ -20,7 +20,7 @@ using Pseudo_MD_DoC_API.Users;
 
 namespace Pseudo_MD_DoC_API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -43,7 +43,7 @@ namespace Pseudo_MD_DoC_API.Controllers
             var user = _userService.Authenticate(model.EmailAddress, model.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = "Email or password is incorrect" });
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -63,7 +63,7 @@ namespace Pseudo_MD_DoC_API.Controllers
             return Ok(new
             {
                 Id = user.Id,
-                Username = user.EmailAddress,
+                EmailAddress = user.EmailAddress,
                 Name = user.Name,
                 Token = tokenString
             });

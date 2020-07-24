@@ -9,7 +9,7 @@ namespace Pseudo_MD_DoC_API.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
+        User Authenticate(string emailAddress, string password);
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(User user, string password);
@@ -33,7 +33,7 @@ namespace Pseudo_MD_DoC_API.Services
 
             var user = _context.Users.SingleOrDefault(x => x.EmailAddress == emailAddress);
 
-            // check if username exists
+            // check if emailAddress exists
             if (user == null)
                 return null;
 
@@ -83,10 +83,10 @@ namespace Pseudo_MD_DoC_API.Services
             if (user == null)
                 throw new Exception("User not found");
 
-            // update username if it has changed
+            // update email address if it has changed
             if (!string.IsNullOrWhiteSpace(userParam.EmailAddress) && userParam.EmailAddress != user.EmailAddress)
             {
-                // throw error if the new username is already taken
+                // throw error if the new email address is already taken
                 if (_context.Users.Any(x => x.EmailAddress == userParam.EmailAddress))
                     throw new Exception("There is already an account with email " + userParam.EmailAddress);
 
