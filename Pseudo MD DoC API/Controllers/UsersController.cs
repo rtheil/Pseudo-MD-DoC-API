@@ -65,6 +65,7 @@ namespace Pseudo_MD_DoC_API.Controllers
                 Id = user.Id,
                 EmailAddress = user.EmailAddress,
                 Name = user.Name,
+                Administrator=user.Administrator,
                 Token = tokenString
             });
         }

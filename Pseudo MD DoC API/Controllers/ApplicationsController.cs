@@ -92,6 +92,10 @@ namespace Pseudo_MD_DoC_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Application>> PostApplication(Application application)
         {
+            //SET THE RECEIVED DATE TO NOW
+            application.DateReceived = DateTime.Now;
+
+            //ADD
             _context.Applications.Add(application);
             await _context.SaveChangesAsync();
 

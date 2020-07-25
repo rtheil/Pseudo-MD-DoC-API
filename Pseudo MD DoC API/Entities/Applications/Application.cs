@@ -17,6 +17,9 @@ namespace Pseudo_MD_DoC_API.Applications
         public int Id { get; set; }
 
         [Required]
+        public int userId { get; set; }
+
+        [Required]
         [StringLength(25)]
         public string FirstName { get; set; }
 
@@ -90,9 +93,10 @@ namespace Pseudo_MD_DoC_API.Applications
         }
 
         //PROCESS DATES
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime DateReceived { get; set; }
-        //public DateTime? DateProcessed { get; set; }
+        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[DefaultValue("")]
+        public DateTime? DateReceived { get; set; }
+        public DateTime? DateProcessed { get; set; }
 
     }
 }
