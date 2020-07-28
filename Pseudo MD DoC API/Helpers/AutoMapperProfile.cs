@@ -11,6 +11,7 @@ namespace Pseudo_MD_DoC_API.Helpers
             CreateMap<User, UserModel>();
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
+            CreateMap<ForgotModel, User>();
         }
     }
 }

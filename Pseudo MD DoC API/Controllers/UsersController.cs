@@ -11,12 +11,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Pseudo_MD_DoC_API.Helpers;
 using Pseudo_MD_DoC_API.Models.Users;
 using Pseudo_MD_DoC_API.Persistence;
 using Pseudo_MD_DoC_API.Services;
 using Pseudo_MD_DoC_API.Users;
+using Pseudo_MD_DoC_API.Models;
 
 namespace Pseudo_MD_DoC_API.Controllers
 {
@@ -28,12 +30,14 @@ namespace Pseudo_MD_DoC_API.Controllers
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private IConfiguration _configuration;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IConfiguration configuration)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -86,6 +90,42 @@ namespace Pseudo_MD_DoC_API.Controllers
             catch (Exception ex)
             {
                 // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("reset")]
+        public IActionResult Reset([FromBody] ResetModel model)
+        {
+            try
+            {
+                _userService.UpdatePassword(model);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("forgot")]
+        public IActionResult Forgot([FromBody] ForgotModel model)
+        {
+            try
+            {
+                EmailServerModel esm = new EmailServerModel();
+                esm.Server = _configuration["smtpServer:Server"];
+                esm.Port = Convert.ToInt32(_configuration["smtpServer:Port"]);
+                esm.Username = _configuration["smtpServer:Username"];
+                esm.Password = _configuration["smtpServer:Password"];
+
+                _userService.ResetPassword(model,esm);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(new { message = ex.Message });
             }
         }

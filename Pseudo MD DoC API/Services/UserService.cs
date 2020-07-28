@@ -3,7 +3,12 @@ using Pseudo_MD_DoC_API.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Pseudo_MD_DoC_API.Models;
+using System.Net.Mail;
+using Pseudo_MD_DoC_API.Models.Users;
 
 namespace Pseudo_MD_DoC_API.Services
 {
@@ -13,13 +18,17 @@ namespace Pseudo_MD_DoC_API.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(User user, string password);
+        void UpdatePassword(ResetModel resetModel);
         void Update(User user, string password = null);
         void Delete(int id);
+        void ResetPassword(ForgotModel forgotModel,EmailServerModel emailServerModel);
     }
 
     public class UserService : IUserService
     {
         private AppDbContext _context;
+        private int passwordExpireMinutes = 30;
+        private IConfiguration Configuration { get; }
 
         public UserService(AppDbContext context)
         {
@@ -76,6 +85,67 @@ namespace Pseudo_MD_DoC_API.Services
             return user;
         }
 
+        public void ResetPassword(ForgotModel forgotModel, EmailServerModel emailServerModel)
+        {
+            //CHECK FOR EMPTY
+            if (string.IsNullOrEmpty(forgotModel.EmailAddress))
+                throw new Exception("No email address provided");
+
+            User user;
+            try
+            {
+                //Find the user with the email address provided
+                user = _context.Users.Single(x => x.EmailAddress == forgotModel.EmailAddress);
+            }
+            catch
+            {
+                //Do nothing so that response is 200 regardless of whether or not we found a user
+                return;
+            }
+            //if (user == null)
+                //throw new Exception("No user found"); //I don't think we want this
+
+            //Set up a token for a password forgot request
+            Random random = new Random();
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-=";
+            string resetToken = new string(Enumerable.Repeat(chars, 128).Select(s => s[random.Next(s.Length)]).ToArray());
+
+            //save tokan and expire date to db, good for 30 minutes
+            user.ResetPasswordToken = resetToken;
+            user.ResetPasswordExpires = DateTime.Now.AddMinutes(passwordExpireMinutes);
+
+            //SAVE
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            //send an email with a password reset link containing token
+            //TODO: GET THE URL FROM THE FRONTEND
+            string url = forgotModel.ForgotUrl + "/" + resetToken;
+            EmailService es = new EmailService(emailServerModel);
+            bool success = es.SendEmail(new MailAddress(forgotModel.FromEmail, forgotModel.FromName), forgotModel.EmailAddress, forgotModel.subject, forgotModel.EmailContent.Replace("[forgotUrl]",url));
+
+            return;
+        }
+
+        public void UpdatePassword(ResetModel resetModel)
+        {
+            User user;
+            try
+            {
+                //Find the user based on token provided
+                //passwordExpireMinutes
+                user = _context.Users.Single(x => x.ResetPasswordToken == resetModel.Token && x.ResetPasswordExpires > DateTime.Now);
+
+            }
+            catch
+            {
+                throw new Exception("Invalid token");
+            }
+
+            //Update the user's password
+            Update(user, resetModel.Password);
+        }
+
         public void Update(User userParam, string password = null)
         {
             var user = _context.Users.Find(userParam.Id);
@@ -105,6 +175,8 @@ namespace Pseudo_MD_DoC_API.Services
 
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
+                user.ResetPasswordToken = null;
+                user.ResetPasswordExpires = null;
             }
 
             _context.Users.Update(user);

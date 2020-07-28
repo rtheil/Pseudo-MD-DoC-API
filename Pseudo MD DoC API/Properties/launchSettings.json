@@ -19,12 +19,14 @@
     },
     "Pseudo_MD_DoC_API": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "api/Applications",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
+        "EMAIL_PASSWORD": "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",
+        "EMAIL_SERVER": "smtp.sendgrid.net",
+        "EMAIL_USERNAME": "apikey",
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
     "Azure Dev Spaces": {
       "commandName": "AzureDevSpaces",

@@ -5,6 +5,9 @@
       "type": "mssql.azure",
       "connectionId": "Default",
       "secretStore": "LocalSecretsFile"
+    },
+    "secrets1": {
+      "type": "secrets.user"
     }
   }
 }

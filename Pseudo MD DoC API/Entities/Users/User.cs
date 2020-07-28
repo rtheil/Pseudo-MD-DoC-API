@@ -20,9 +20,6 @@ namespace Pseudo_MD_DoC_API.Users
         [StringLength(100)]
         public string EmailAddress { get; set; }
 
-        //TODO: Store password somehow
-        //protected string StoredPassword { get; set; }
-
         [Required]
         public byte[] PasswordHash { get; set; }
 
@@ -32,5 +29,10 @@ namespace Pseudo_MD_DoC_API.Users
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool Administrator { get; set; }
+
+        [StringLength(128)]
+        public string? ResetPasswordToken { get; set; }
+
+        public DateTime? ResetPasswordExpires { get; set; }
     }
 }
