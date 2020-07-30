@@ -1,0 +1,1 @@
+﻿delete from users where emailaddress='test@test.com'

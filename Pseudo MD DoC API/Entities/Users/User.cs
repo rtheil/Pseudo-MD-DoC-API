@@ -34,5 +34,8 @@ namespace Pseudo_MD_DoC_API.Users
         public string? ResetPasswordToken { get; set; }
 
         public DateTime? ResetPasswordExpires { get; set; }
+
+        [StringLength(128)]
+        public string? AccountVerifyToken { get; set; }
     }
 }

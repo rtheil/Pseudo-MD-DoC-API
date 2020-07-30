@@ -21,7 +21,8 @@ namespace Pseudo_MD_DoC_API.Services
         void UpdatePassword(ResetModel resetModel);
         void Update(User user, string password = null);
         void Delete(int id);
-        void ResetPassword(ForgotModel forgotModel,EmailServerModel emailServerModel);
+        void ResetPassword(ForgotModel forgotModel);
+        void VerifyResetToken(TokenModel token);
     }
 
     public class UserService : IUserService
@@ -33,6 +34,14 @@ namespace Pseudo_MD_DoC_API.Services
         public UserService(AppDbContext context)
         {
             _context = context;
+        }
+
+        private string Token()
+        {
+            Random random = new Random();
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-=";
+            string resetToken = new string(Enumerable.Repeat(chars, 128).Select(s => s[random.Next(s.Length)]).ToArray());
+            return resetToken;
         }
 
         public User Authenticate(string emailAddress, string password)
@@ -66,26 +75,32 @@ namespace Pseudo_MD_DoC_API.Services
 
         public User Create(User user, string password)
         {
-            // validation
+            // validate password
             if (string.IsNullOrWhiteSpace(password))
                 throw new Exception("Password is required");
 
+            //does account already exist?
             if (_context.Users.Any(x => x.EmailAddress == user.EmailAddress))
                 throw new Exception("There is already an account with email \"" + user.EmailAddress + "\"");
 
+            //Hash and set the password
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
+            //Create verification token
+            string token = Token();
+            user.AccountVerifyToken = token;
+
+            //Save new user
             _context.Users.Add(user);
             _context.SaveChanges();
 
             return user;
         }
 
-        public void ResetPassword(ForgotModel forgotModel, EmailServerModel emailServerModel)
+        public void ResetPassword(ForgotModel forgotModel)
         {
             //CHECK FOR EMPTY
             if (string.IsNullOrEmpty(forgotModel.EmailAddress))
@@ -102,15 +117,9 @@ namespace Pseudo_MD_DoC_API.Services
                 //Do nothing so that response is 200 regardless of whether or not we found a user
                 return;
             }
-            //if (user == null)
-                //throw new Exception("No user found"); //I don't think we want this
 
-            //Set up a token for a password forgot request
-            Random random = new Random();
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-=";
-            string resetToken = new string(Enumerable.Repeat(chars, 128).Select(s => s[random.Next(s.Length)]).ToArray());
-
-            //save tokan and expire date to db, good for 30 minutes
+            //Get random token and save token/expire date to db, good for 30 minutes
+            string resetToken = Token();
             user.ResetPasswordToken = resetToken;
             user.ResetPasswordExpires = DateTime.Now.AddMinutes(passwordExpireMinutes);
 
@@ -118,13 +127,39 @@ namespace Pseudo_MD_DoC_API.Services
             _context.Users.Update(user);
             _context.SaveChanges();
 
-            //send an email with a password reset link containing token
-            //TODO: GET THE URL FROM THE FRONTEND
-            string url = forgotModel.ForgotUrl + "/" + resetToken;
-            EmailService es = new EmailService(emailServerModel);
-            bool success = es.SendEmail(new MailAddress(forgotModel.FromEmail, forgotModel.FromName), forgotModel.EmailAddress, forgotModel.subject, forgotModel.EmailContent.Replace("[forgotUrl]",url));
+            //get email details from Configuration
+            var config = from c in _context.Configuration where c.propertyName.StartsWith("forgotEmail") select c;
+            
+            //PASSWORD RESET URL FOR EMAIL
+            string url = config.Single(x => x.propertyName == "forgotEmailUrl").propertyValue + "/" + resetToken;
 
+            //send an email with a password reset link containing token
+            EmailService es = new EmailService(_context);
+            bool success = es.SendEmail(
+                new MailAddress(
+                    config.Single(x => x.propertyName == "forgotEmailFromAddress").propertyValue,
+                    config.Single(x => x.propertyName == "forgotEmailFromName").propertyValue
+                    ), 
+                forgotModel.EmailAddress,
+                config.Single(x => x.propertyName == "forgotEmailSubject").propertyValue,
+                config.Single(x => x.propertyName == "forgotEmailContent").propertyValue.Replace("[forgotEmailUrl]",url)
+                );
+            if (!success) throw new Exception("Could not connect to SMTP server");
             return;
+        }
+
+        public void VerifyResetToken(TokenModel token)
+        {
+            try
+            {
+                //Find the user based on token provided
+                User user = _context.Users.Single(x => x.ResetPasswordToken == token.Token && x.ResetPasswordExpires > DateTime.Now);
+            }
+            catch
+            {
+                throw new Exception("Invalid token");
+            }
+
         }
 
         public void UpdatePassword(ResetModel resetModel)
@@ -133,9 +168,7 @@ namespace Pseudo_MD_DoC_API.Services
             try
             {
                 //Find the user based on token provided
-                //passwordExpireMinutes
                 user = _context.Users.Single(x => x.ResetPasswordToken == resetModel.Token && x.ResetPasswordExpires > DateTime.Now);
-
             }
             catch
             {

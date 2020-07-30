@@ -115,19 +115,29 @@ namespace Pseudo_MD_DoC_API.Controllers
         {
             try
             {
-                EmailServerModel esm = new EmailServerModel();
-                esm.Server = _configuration["smtpServer:Server"];
-                esm.Port = Convert.ToInt32(_configuration["smtpServer:Port"]);
-                esm.Username = _configuration["smtpServer:Username"];
-                esm.Password = _configuration["smtpServer:Password"];
-
-                _userService.ResetPassword(model,esm);
+                _userService.ResetPassword(model);
                 return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("verifytoken")]
+        public IActionResult VerifyToken([FromBody] TokenModel model)
+        {
+            try
+            {
+                _userService.VerifyResetToken(model);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
         }
 
         [HttpGet]
