@@ -22,6 +22,7 @@
       "launchUrl": "api/Applications",
       "environmentVariables": {
         "EMAIL_PASSWORD": "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",
+        "Key": "Value",
         "EMAIL_SERVER": "smtp.sendgrid.net",
         "EMAIL_USERNAME": "apikey",
         "ASPNETCORE_ENVIRONMENT": "Development"
