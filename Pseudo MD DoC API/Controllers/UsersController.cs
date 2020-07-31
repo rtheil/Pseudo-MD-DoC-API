@@ -44,11 +44,18 @@ namespace Pseudo_MD_DoC_API.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] AuthenticateModel model)
         {
+            //verify user
             var user = _userService.Authenticate(model.EmailAddress, model.Password);
 
+            //check if good return from auth service
             if (user == null)
                 return BadRequest(new { message = "Email or password is incorrect" });
 
+            //check if user account is verified
+            if (user.AccountVerified == false)
+                return BadRequest("Account not verified");
+
+            //create jwt
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -125,8 +132,8 @@ namespace Pseudo_MD_DoC_API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("verifytoken")]
-        public IActionResult VerifyToken([FromBody] TokenModel model)
+        [HttpPost("verifyresettoken")]
+        public IActionResult VerifyResetToken([FromBody] TokenModel model)
         {
             try
             {
@@ -140,6 +147,21 @@ namespace Pseudo_MD_DoC_API.Controllers
 
         }
 
+        [AllowAnonymous]
+        [HttpPost("verifyregistertoken")]
+        public IActionResult VerifyRegisterToken([FromBody] TokenModel model)
+        {
+            try
+            {
+                _userService.VerifyRegisterToken(model);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

@@ -23,6 +23,7 @@ namespace Pseudo_MD_DoC_API.Services
         void Delete(int id);
         void ResetPassword(ForgotModel forgotModel);
         void VerifyResetToken(TokenModel token);
+        void VerifyRegisterToken(TokenModel token);
     }
 
     public class UserService : IUserService
@@ -44,18 +45,41 @@ namespace Pseudo_MD_DoC_API.Services
             return resetToken;
         }
 
+        private void SendEmail(string configString, string to, string token)
+        {
+            //get email details from Configuration
+            var config = from c in _context.Configuration where c.propertyName.StartsWith(configString) select c;
+
+            //PASSWORD RESET URL FOR EMAIL
+            string url = config.Single(x => x.propertyName == configString+"Url").propertyValue + "/" + token;
+
+            //send an email with a password reset link containing token
+            EmailService es = new EmailService(_context);
+            bool success = es.SendEmail(
+                new MailAddress(
+                    config.Single(x => x.propertyName == configString+"FromAddress").propertyValue,
+                    config.Single(x => x.propertyName == configString + "FromName").propertyValue
+                    ),
+                to,
+                config.Single(x => x.propertyName == configString + "Subject").propertyValue,
+                config.Single(x => x.propertyName == configString + "Content").propertyValue.Replace("["+ configString + "Url]", url)
+                );
+            if (!success) throw new Exception("Could not connect to SMTP server");
+        }
+
         public User Authenticate(string emailAddress, string password)
         {
             if (string.IsNullOrEmpty(emailAddress) || string.IsNullOrEmpty(password))
                 return null;
 
+            //try to get user
             var user = _context.Users.SingleOrDefault(x => x.EmailAddress == emailAddress);
 
-            // check if emailAddress exists
+            //check if emailAddress exists
             if (user == null)
                 return null;
 
-            // check if password is correct
+            //check if password is correct
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
@@ -97,6 +121,9 @@ namespace Pseudo_MD_DoC_API.Services
             _context.Users.Add(user);
             _context.SaveChanges();
 
+            //send verification email
+            SendEmail("newUser", user.EmailAddress, user.AccountVerifyToken);
+
             return user;
         }
 
@@ -127,24 +154,8 @@ namespace Pseudo_MD_DoC_API.Services
             _context.Users.Update(user);
             _context.SaveChanges();
 
-            //get email details from Configuration
-            var config = from c in _context.Configuration where c.propertyName.StartsWith("forgotEmail") select c;
-            
-            //PASSWORD RESET URL FOR EMAIL
-            string url = config.Single(x => x.propertyName == "forgotEmailUrl").propertyValue + "/" + resetToken;
-
-            //send an email with a password reset link containing token
-            EmailService es = new EmailService(_context);
-            bool success = es.SendEmail(
-                new MailAddress(
-                    config.Single(x => x.propertyName == "forgotEmailFromAddress").propertyValue,
-                    config.Single(x => x.propertyName == "forgotEmailFromName").propertyValue
-                    ), 
-                forgotModel.EmailAddress,
-                config.Single(x => x.propertyName == "forgotEmailSubject").propertyValue,
-                config.Single(x => x.propertyName == "forgotEmailContent").propertyValue.Replace("[forgotEmailUrl]",url)
-                );
-            if (!success) throw new Exception("Could not connect to SMTP server");
+            //send email
+            SendEmail("forgotEmail", user.EmailAddress, user.ResetPasswordToken);
             return;
         }
 
@@ -154,6 +165,33 @@ namespace Pseudo_MD_DoC_API.Services
             {
                 //Find the user based on token provided
                 User user = _context.Users.Single(x => x.ResetPasswordToken == token.Token && x.ResetPasswordExpires > DateTime.Now);
+
+                //reset the token and save
+                user.ResetPasswordToken = null;
+                user.ResetPasswordExpires = null;
+
+                _context.Users.Update(user);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("Invalid token");
+            }
+
+        }
+        public void VerifyRegisterToken(TokenModel token)
+        {
+            try
+            {
+                //Find the user based on token provided
+                User user = _context.Users.Single(x => x.AccountVerifyToken == token.Token);
+
+                user.AccountVerified = true;
+                user.AccountVerifyToken = null;
+
+                _context.Users.Update(user);
+                _context.SaveChanges();
+
             }
             catch
             {

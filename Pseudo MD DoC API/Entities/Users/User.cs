@@ -37,5 +37,7 @@ namespace Pseudo_MD_DoC_API.Users
 
         [StringLength(128)]
         public string? AccountVerifyToken { get; set; }
+
+        public bool AccountVerified { get; set; }
     }
 }
