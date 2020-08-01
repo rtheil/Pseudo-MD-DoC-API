@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Pseudo_MD_DoC_API.Applications;
+using Pseudo_MD_DoC_API.Models.Applications;
 using Pseudo_MD_DoC_API.Models.Users;
 using Pseudo_MD_DoC_API.Users;
 
@@ -12,6 +14,7 @@ namespace Pseudo_MD_DoC_API.Helpers
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
             CreateMap<ForgotModel, User>();
+            CreateMap<Application, ApplicationModel>();
         }
     }
 }

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pseudo_MD_DoC_API.Applications;
 using Pseudo_MD_DoC_API.Persistence;
+using AutoMapper;
+using Pseudo_MD_DoC_API.Models.Applications;
 
 namespace Pseudo_MD_DoC_API.Controllers
 {
@@ -17,27 +19,33 @@ namespace Pseudo_MD_DoC_API.Controllers
     public class ApplicationsController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public ApplicationsController(AppDbContext context)
+        private readonly IMapper _mapper;
+        public ApplicationsController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Applications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Application>>> GetApplications()
+        public async Task<IEnumerable<ApplicationModel>> GetApplications()
         {
-            return await _context.Applications
+            var applications = await _context.Applications
                 .Include(a => a.Education)
                 .Include(a => a.References)
                 .Include(a => a.Employment)
                 .Include(a => a.User)
                 .ToListAsync();
+
+            //map to output model
+            IEnumerable<ApplicationModel> newApplications = _mapper.Map<IEnumerable<ApplicationModel>>(applications);
+
+            return newApplications;
         }
 
         // GET: api/Applications/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Application>> GetApplication(int id)
+        public async Task<ActionResult<ApplicationModel>> GetApplication(int id)
         {
             var application = await _context.Applications
                 .Include(a => a.Education)
@@ -46,12 +54,14 @@ namespace Pseudo_MD_DoC_API.Controllers
                 .Include(a => a.User)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
+            //not found
             if (application == null)
-            {
                 return NotFound();
-            }
 
-            return application;
+            //map to output model
+            ApplicationModel newApplication = _mapper.Map<ApplicationModel>(application);
+
+            return newApplication;
         }
 
         // PUT: api/Applications/5
