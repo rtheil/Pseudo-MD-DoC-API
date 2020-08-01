@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pseudo_MD_DoC_API.Users;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,12 +13,19 @@ namespace Pseudo_MD_DoC_API.Applications
     //[Table("Applications")]
     public class Application
     {
+        public Application()
+        {
+            Education = new Collection<Education>();
+            Employment = new Collection<Employment>();
+            References = new Collection<Reference>();
+        }
+
         //APPLICANT INFORMATION
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public int userId { get; set; }
+        public User User { get; set; }
 
         [Required]
         [StringLength(25)]
@@ -85,16 +93,7 @@ namespace Pseudo_MD_DoC_API.Applications
 
         public int? TestScore { get; set; }
 
-        public Application()
-        {
-            Education = new Collection<Education>();
-            Employment = new Collection<Employment>();
-            References = new Collection<Reference>();
-        }
-
         //PROCESS DATES
-        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        //[DefaultValue("")]
         public DateTime? DateReceived { get; set; }
         public DateTime? DateProcessed { get; set; }
 

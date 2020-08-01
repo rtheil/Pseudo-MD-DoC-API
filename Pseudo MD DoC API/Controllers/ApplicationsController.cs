@@ -28,9 +28,10 @@ namespace Pseudo_MD_DoC_API.Controllers
         public async Task<ActionResult<IEnumerable<Application>>> GetApplications()
         {
             return await _context.Applications
-                .Include(edu => edu.Education)
-                .Include(r => r.References)
-                .Include(emp => emp.Employment)
+                .Include(a => a.Education)
+                .Include(a => a.References)
+                .Include(a => a.Employment)
+                .Include(a => a.User)
                 .ToListAsync();
         }
 
@@ -38,13 +39,12 @@ namespace Pseudo_MD_DoC_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Application>> GetApplication(int id)
         {
-            //var application = await _context.Applications.FindAsync(id);
             var application = await _context.Applications
-                .Include(edu => edu.Education)
-                .Include(r => r.References)
-                .Include(emp => emp.Employment)
+                .Include(a => a.Education)
+                .Include(a => a.References)
+                .Include(a => a.Employment)
+                .Include(a => a.User)
                 .FirstOrDefaultAsync(i => i.Id == id);
-
 
             if (application == null)
             {

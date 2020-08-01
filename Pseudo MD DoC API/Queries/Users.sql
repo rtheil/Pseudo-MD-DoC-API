@@ -4,3 +4,5 @@ update users set accountVerified=1
 
 select * from configuration
 
+select * from applications
+update applications set userid=1

@@ -70,6 +70,12 @@
     <Compile Remove="Migrations\20200725052853_readd-app-userid.Designer.cs" />
     <Compile Remove="Migrations\20200725052913_readd-app-userid.cs" />
     <Compile Remove="Migrations\20200725052913_readd-app-userid.Designer.cs" />
+    <Compile Remove="Migrations\20200731225906_change-user.cs" />
+    <Compile Remove="Migrations\20200731225906_change-user.Designer.cs" />
+    <Compile Remove="Migrations\20200731234716_change-user.cs" />
+    <Compile Remove="Migrations\20200731234716_change-user.Designer.cs" />
+    <Compile Remove="Migrations\20200801024928_text-m.cs" />
+    <Compile Remove="Migrations\20200801024928_text-m.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
