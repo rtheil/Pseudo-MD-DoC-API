@@ -10,11 +10,15 @@ namespace Pseudo_MD_DoC_API.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserModel>();
-            CreateMap<RegisterModel, User>();
-            CreateMap<UpdateModel, User>();
-            CreateMap<ForgotModel, User>();
-            CreateMap<Application, ApplicationModel>();
+            // Users
+            CreateMap<User, UserOutputModel>();
+            CreateMap<UserRegisterModel, User>();
+            CreateMap<UserUpdateModel, User>();
+            CreateMap<UserForgotModel, User>();
+
+            //Applications
+            CreateMap<Application, ApplicationOutputModel>();
+            CreateMap<ApplicationSaveModel, Application>();
         }
     }
 }

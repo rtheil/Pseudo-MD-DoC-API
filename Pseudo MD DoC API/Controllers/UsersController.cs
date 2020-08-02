@@ -42,7 +42,7 @@ namespace Pseudo_MD_DoC_API.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] AuthenticateModel model)
+        public IActionResult Authenticate([FromBody] UserAuthModel model)
         {
             //verify user
             var user = _userService.Authenticate(model.EmailAddress, model.Password);
@@ -83,7 +83,7 @@ namespace Pseudo_MD_DoC_API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterModel model)
+        public IActionResult Register([FromBody] UserRegisterModel model)
         {
             // map model to entity
             var user = _mapper.Map<User>(model);
@@ -103,7 +103,7 @@ namespace Pseudo_MD_DoC_API.Controllers
 
         [AllowAnonymous]
         [HttpPost("reset")]
-        public IActionResult Reset([FromBody] ResetModel model)
+        public IActionResult Reset([FromBody] UserResetModel model)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace Pseudo_MD_DoC_API.Controllers
 
         [AllowAnonymous]
         [HttpPost("forgot")]
-        public IActionResult Forgot([FromBody] ForgotModel model)
+        public IActionResult Forgot([FromBody] UserForgotModel model)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Pseudo_MD_DoC_API.Controllers
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
-            var model = _mapper.Map<IList<UserModel>>(users);
+            var model = _mapper.Map<IList<UserOutputModel>>(users);
             return Ok(model);
         }
 
@@ -174,12 +174,12 @@ namespace Pseudo_MD_DoC_API.Controllers
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
-            var model = _mapper.Map<UserModel>(user);
+            var model = _mapper.Map<UserOutputModel>(user);
             return Ok(model);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UpdateModel model)
+        public IActionResult Update(int id, [FromBody] UserUpdateModel model)
         {
             // map model to entity and set id
             var user = _mapper.Map<User>(model);

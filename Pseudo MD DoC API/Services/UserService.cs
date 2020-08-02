@@ -18,10 +18,10 @@ namespace Pseudo_MD_DoC_API.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(User user, string password);
-        void UpdatePassword(ResetModel resetModel);
+        void UpdatePassword(UserResetModel resetModel);
         void Update(User user, string password = null);
         void Delete(int id);
-        void ResetPassword(ForgotModel forgotModel);
+        void ResetPassword(UserForgotModel forgotModel);
         void VerifyResetToken(TokenModel token);
         void VerifyRegisterToken(TokenModel token);
     }
@@ -127,7 +127,7 @@ namespace Pseudo_MD_DoC_API.Services
             return user;
         }
 
-        public void ResetPassword(ForgotModel forgotModel)
+        public void ResetPassword(UserForgotModel forgotModel)
         {
             //CHECK FOR EMPTY
             if (string.IsNullOrEmpty(forgotModel.EmailAddress))
@@ -200,7 +200,7 @@ namespace Pseudo_MD_DoC_API.Services
 
         }
 
-        public void UpdatePassword(ResetModel resetModel)
+        public void UpdatePassword(UserResetModel resetModel)
         {
             User user;
             try

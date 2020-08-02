@@ -16,11 +16,9 @@ namespace Pseudo_MD_DoC_API.Services
     }
     public class EmailService : IEmailService
     {
-        //private EmailServerModel _emailServerModel;
         private AppDbContext _context;
         public EmailService(AppDbContext context)
         {
-            //_emailServerModel = emailServerModel;
             _context = context;
         }
 
@@ -36,7 +34,10 @@ namespace Pseudo_MD_DoC_API.Services
                 esm.Username = config.Single(x => x.propertyName == "emailServerUsername").propertyValue;
                 esm.Password = config.Single(x => x.propertyName == "emailServerPassword").propertyValue;
             }
-            catch (Exception ex) { throw new Exception("Can't get SMTP server configuration"); }
+            catch (Exception ex)
+            {
+                throw new Exception("Can't get SMTP server configuration: " + ex.Message);
+            }
 
             try
             {
@@ -50,7 +51,7 @@ namespace Pseudo_MD_DoC_API.Services
             }
             catch(Exception ex) 
             {
-                return false;
+                throw new Exception("Error sending email: " + ex.Message);
             }
 
             return true;

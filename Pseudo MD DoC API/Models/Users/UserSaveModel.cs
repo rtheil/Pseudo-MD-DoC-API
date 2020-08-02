@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace Pseudo_MD_DoC_API.Models.Users
 {
-    public class UserModel
+    public class UserSaveModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string EmailAddress { get; set; }
-        public bool Administrator { get; set; }
     }
 }

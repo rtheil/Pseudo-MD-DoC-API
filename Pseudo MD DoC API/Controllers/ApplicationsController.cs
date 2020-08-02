@@ -10,6 +10,7 @@ using Pseudo_MD_DoC_API.Applications;
 using Pseudo_MD_DoC_API.Persistence;
 using AutoMapper;
 using Pseudo_MD_DoC_API.Models.Applications;
+using Pseudo_MD_DoC_API.Services;
 
 namespace Pseudo_MD_DoC_API.Controllers
 {
@@ -20,55 +21,50 @@ namespace Pseudo_MD_DoC_API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public ApplicationsController(AppDbContext context, IMapper mapper)
+        IApplicationService _applicationService;
+        public ApplicationsController(AppDbContext context, IMapper mapper,IApplicationService applicationService)
         {
             _context = context;
             _mapper = mapper;
+            _applicationService = applicationService;
         }
 
         // GET: api/Applications
         [HttpGet]
-        public async Task<IEnumerable<ApplicationModel>> GetApplications()
+        public async Task<IActionResult> GetApplications()
         {
-            var applications = await _context.Applications
-                .Include(a => a.Education)
-                .Include(a => a.References)
-                .Include(a => a.Employment)
-                .Include(a => a.User)
-                .ToListAsync();
-
-            //map to output model
-            IEnumerable<ApplicationModel> newApplications = _mapper.Map<IEnumerable<ApplicationModel>>(applications);
-
-            return newApplications;
+            try
+            {
+                var applications = await _applicationService.GetAll();
+                return Ok(applications);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // GET: api/Applications/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationModel>> GetApplication(int id)
+        public async Task<ActionResult<ApplicationOutputModel>> GetApplication(int id)
         {
-            var application = await _context.Applications
-                .Include(a => a.Education)
-                .Include(a => a.References)
-                .Include(a => a.Employment)
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(i => i.Id == id);
-
-            //not found
-            if (application == null)
-                return NotFound();
-
-            //map to output model
-            ApplicationModel newApplication = _mapper.Map<ApplicationModel>(application);
-
-            return newApplication;
+            try
+            {
+                var application = await _applicationService.GetById(id);
+                return Ok(application);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // PUT: api/Applications/5
+        //TODO: Move to application service
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutApplication(int id, Application application)
+        public async Task<IActionResult> PutApplication(int id, Applications.Application application)
         {
             if (id != application.Id)
             {
@@ -97,35 +93,33 @@ namespace Pseudo_MD_DoC_API.Controllers
         }
 
         // POST: api/Applications
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Application>> PostApplication(Application application)
+        public async Task<IActionResult> PostApplication([FromBody] ApplicationSaveModel application)
         {
-            //SET THE RECEIVED DATE TO NOW
-            application.DateReceived = DateTime.Now;
-
-            //ADD
-            _context.Applications.Add(application);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetApplication", new { id = application.Id }, application);
+            try
+            {
+                var newApp = await _applicationService.Create(application);
+                return CreatedAtAction("GetApplication", new { id = newApp.Id }, newApp);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // DELETE: api/Applications/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Application>> DeleteApplication(int id)
+        public async Task<ActionResult<Applications.Application>> DeleteApplication(int id)
         {
-            var application = await _context.Applications.FindAsync(id);
-            if (application == null)
+            try
             {
-                return NotFound();
+                await _applicationService.Delete(id);
+                return Ok();
             }
-
-            _context.Applications.Remove(application);
-            await _context.SaveChangesAsync();
-
-            return application;
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         private bool ApplicationExists(int id)
