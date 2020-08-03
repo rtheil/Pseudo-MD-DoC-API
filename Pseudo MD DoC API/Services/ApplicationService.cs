@@ -7,12 +7,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Pseudo_MD_DoC_API.Models.Applications;
 using Microsoft.EntityFrameworkCore;
+using Pseudo_MD_DoC_API.Users;
 
 namespace Pseudo_MD_DoC_API.Services
 {
     public interface IApplicationService
     {
         public Task<IEnumerable<ApplicationOutputModel>> GetAll();
+        public Task<IEnumerable<ApplicationOutputModel>> GetAll(User user);
         public Task<ApplicationOutputModel> GetById(int id);
         public Task<ApplicationOutputModel> Create(ApplicationSaveModel application);
         public Task<ApplicationOutputModel> Update(ApplicationSaveModel application);
@@ -28,6 +30,23 @@ namespace Pseudo_MD_DoC_API.Services
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<ApplicationOutputModel>> GetAll(User user)
+        {
+            //var user = await _context.Users.SingleAsync(u => u.Id == userId);
+            var applications = await _context.Applications
+                .Include(a => a.Education)
+                .Include(a => a.References)
+                .Include(a => a.Employment)
+                .Include(a => a.User)
+                .Where(a => a.User == user)
+                .ToListAsync();
+
+            //map to output model
+            IEnumerable<ApplicationOutputModel> newApplications = _mapper.Map<IEnumerable<ApplicationOutputModel>>(applications);
+            return newApplications;
+        }
+
+
         public async Task<IEnumerable<ApplicationOutputModel>> GetAll()
         {
             var applications = await _context.Applications
@@ -40,7 +59,6 @@ namespace Pseudo_MD_DoC_API.Services
             //map to output model
             IEnumerable<ApplicationOutputModel> newApplications = _mapper.Map<IEnumerable<ApplicationOutputModel>>(applications);
             return newApplications;
-
         }
 
         public async Task<ApplicationOutputModel> GetById(int id)

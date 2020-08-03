@@ -11,6 +11,8 @@ using Pseudo_MD_DoC_API.Persistence;
 using AutoMapper;
 using Pseudo_MD_DoC_API.Models.Applications;
 using Pseudo_MD_DoC_API.Services;
+using Microsoft.AspNetCore.Authentication;
+//using Microsoft.Extensions.Configuration;
 
 namespace Pseudo_MD_DoC_API.Controllers
 {
@@ -22,11 +24,13 @@ namespace Pseudo_MD_DoC_API.Controllers
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         IApplicationService _applicationService;
+        //AuthenticationBuilder _configuration;
         public ApplicationsController(AppDbContext context, IMapper mapper,IApplicationService applicationService)
         {
             _context = context;
             _mapper = mapper;
             _applicationService = applicationService;
+            //_configuration = configuration;
         }
 
         // GET: api/Applications
@@ -39,6 +43,22 @@ namespace Pseudo_MD_DoC_API.Controllers
                 return Ok(applications);
             }
             catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        // GET: api/Applications/user/1
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUserApplications(int id)
+        {
+            try
+            {
+                var user = await _context.Users.SingleAsync(u => u.Id == id);
+                var applications = await _applicationService.GetAll(user);
+                return Ok(applications);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
