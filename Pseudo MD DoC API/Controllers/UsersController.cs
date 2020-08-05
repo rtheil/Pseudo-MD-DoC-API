@@ -91,8 +91,8 @@ namespace Pseudo_MD_DoC_API.Controllers
             try
             {
                 // create user
-                _userService.Create(user, model.Password);
-                return Ok();
+                var newUser = _userService.Create(user, model.Password);
+                return Created("", newUser.Id);
             }
             catch (Exception ex)
             {
