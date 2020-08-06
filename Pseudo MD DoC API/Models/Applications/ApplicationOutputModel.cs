@@ -32,6 +32,7 @@ namespace Pseudo_MD_DoC_API.Models.Applications
         public int? TestScore { get; set; }
         public DateTime? DateReceived { get; set; }
         public DateTime? DateProcessed { get; set; }
+        public DateTime? DateBackgroundCheckComplete { get; set; }
 
     }
 }

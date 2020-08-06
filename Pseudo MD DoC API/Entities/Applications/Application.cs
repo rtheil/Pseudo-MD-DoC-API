@@ -91,8 +91,7 @@ namespace Pseudo_MD_DoC_API.Applications
         //PROCESS DATES
         public DateTime? DateReceived { get; set; }
         public DateTime? DateProcessed { get; set; }
-
-        public bool BackgroundCheckComplete { get; set; }
+        public DateTime? DateBackgroundCheckComplete { get; set; }
 
     }
 }
