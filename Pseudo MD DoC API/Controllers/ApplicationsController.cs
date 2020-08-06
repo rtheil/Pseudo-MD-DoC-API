@@ -23,14 +23,16 @@ namespace Pseudo_MD_DoC_API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        IApplicationService _applicationService;
-        //AuthenticationBuilder _configuration;
-        public ApplicationsController(AppDbContext context, IMapper mapper,IApplicationService applicationService)
+        private readonly IApplicationService _applicationService;
+        private readonly IUserService _userService;
+
+        public ApplicationsController(AppDbContext context, IMapper mapper,IApplicationService applicationService, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
             _applicationService = applicationService;
-            //_configuration = configuration;
+            _userService = userService;
+            //bool admin = _userService.isAdmin(int.Parse(User.Identity.Name));
         }
 
         // GET: api/Applications

@@ -18,12 +18,14 @@ using Pseudo_MD_DoC_API.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Pseudo_MD_DoC_API.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace Pseudo_MD_DoC_API
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public ClaimsPrincipal User { get; }
 
         public Startup(IConfiguration configuration)
         {

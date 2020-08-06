@@ -24,6 +24,7 @@ namespace Pseudo_MD_DoC_API.Services
         void ResetPassword(UserForgotModel forgotModel);
         void VerifyResetToken(TokenModel token);
         void VerifyRegisterToken(TokenModel token);
+        bool isAdmin(int id);
     }
 
     public class UserService : IUserService
@@ -262,6 +263,16 @@ namespace Pseudo_MD_DoC_API.Services
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
+        }
+
+        public bool isAdmin(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user!=null)
+            {
+                return user.Administrator;
+            }
+            return false;
         }
 
         // private helper methods
