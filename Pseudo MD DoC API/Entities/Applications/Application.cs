@@ -63,10 +63,6 @@ namespace Pseudo_MD_DoC_API.Applications
         public string CellPhone { get; set; }
 
         [Required]
-        [StringLength(255)]
-        public string EMailAddress { get; set; } //TODO: REMOVE BECAUSE USER ACCOUNT HAS THIS
-
-        [Required]
         [StringLength(9)]
         public string SocialSecurityNumber { get; set; }
 
@@ -88,7 +84,6 @@ namespace Pseudo_MD_DoC_API.Applications
 
         //POST-APPLICATION INTERNAL INFORMATION
         [Required]
-        //public ICollection<ApplicationStatus> ApplicationStatus { get; set; }
         public ApplicationStatus.Type ApplicationStatus { get; set; }
 
         public int? TestScore { get; set; }
@@ -96,6 +91,8 @@ namespace Pseudo_MD_DoC_API.Applications
         //PROCESS DATES
         public DateTime? DateReceived { get; set; }
         public DateTime? DateProcessed { get; set; }
+
+        public bool BackgroundCheckComplete { get; set; }
 
     }
 }

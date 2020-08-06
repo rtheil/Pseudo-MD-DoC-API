@@ -21,7 +21,6 @@ namespace Pseudo_MD_DoC_API.Models.Applications
         public string ZipCode { get; set; }
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
-        public string EMailAddress { get; set; } //TODO: REMOVE BECAUSE USER ACCOUNT HAS THIS
         public string SocialSecurityNumber { get; set; }
         public bool IsUsCitizen { get; set; }
         public bool HasFelony { get; set; }
