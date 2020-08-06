@@ -31,13 +31,16 @@ namespace Pseudo_MD_DoC_API.Users
         public bool Administrator { get; set; }
 
         [StringLength(128)]
+        #nullable enable
         public string? ResetPasswordToken { get; set; }
+        #nullable disable
 
         public DateTime? ResetPasswordExpires { get; set; }
 
         [StringLength(128)]
+        #nullable enable
         public string? AccountVerifyToken { get; set; }
-
+        #nullable disable
         public bool AccountVerified { get; set; }
     }
 }
