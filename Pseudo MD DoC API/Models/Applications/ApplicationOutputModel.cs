@@ -28,7 +28,7 @@ namespace Pseudo_MD_DoC_API.Models.Applications
         public ICollection<Education> Education { get; set; }
         public ICollection<Employment> Employment { get; set; }
         public ICollection<Reference> References { get; set; }
-        public ApplicationStatus.Type ApplicationStatus { get; set; }
+        public ApplicationStatus ApplicationStatus { get; set; }
         public int? TestScore { get; set; }
         public DateTime? DateReceived { get; set; }
         public DateTime? DateProcessed { get; set; }

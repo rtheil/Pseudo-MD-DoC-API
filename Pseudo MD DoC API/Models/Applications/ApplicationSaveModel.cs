@@ -47,7 +47,7 @@ namespace Pseudo_MD_DoC_API.Models.Applications
         [Required]
         public ICollection<Reference> References { get; set; }
         [Required]
-        public ApplicationStatus.Type ApplicationStatus { get; set; }
+        public int ApplicationStatusId { get; set; }
         public int? TestScore { get; set; }
         public DateTime? DateReceived { get; set; }
         public DateTime? DateProcessed { get; set; }

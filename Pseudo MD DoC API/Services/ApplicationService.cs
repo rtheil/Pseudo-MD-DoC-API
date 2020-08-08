@@ -38,6 +38,7 @@ namespace Pseudo_MD_DoC_API.Services
                 .Include(a => a.References)
                 .Include(a => a.Employment)
                 .Include(a => a.User)
+                .Include(a => a.ApplicationStatus)
                 .Where(a => a.User == user)
                 .ToListAsync();
 
@@ -54,6 +55,7 @@ namespace Pseudo_MD_DoC_API.Services
                 .Include(a => a.References)
                 .Include(a => a.Employment)
                 .Include(a => a.User)
+                .Include(a => a.ApplicationStatus)
                 .ToListAsync();
 
             //map to output model
@@ -68,6 +70,7 @@ namespace Pseudo_MD_DoC_API.Services
                 .Include(a => a.References)
                 .Include(a => a.Employment)
                 .Include(a => a.User)
+                .Include(a => a.ApplicationStatus)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             //not found
@@ -90,8 +93,12 @@ namespace Pseudo_MD_DoC_API.Services
             var saveApplication = _mapper.Map<Application>(application);
 
             //find user
-            var user = _context.Users.SingleOrDefault(u => u.Id == application.UserId);
+            var user = await _context.Users.SingleAsync(u => u.Id == application.UserId);
             saveApplication.User = user;
+
+            //find application status
+            var appStatus = await _context.ApplicationStatus.SingleAsync(a=> a.Id==application.ApplicationStatusId);
+            saveApplication.ApplicationStatus = appStatus;
 
             //ADD
             _context.Applications.Add(saveApplication);

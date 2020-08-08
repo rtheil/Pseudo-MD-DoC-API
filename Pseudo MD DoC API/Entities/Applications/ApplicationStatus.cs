@@ -8,15 +8,14 @@ namespace Pseudo_MD_DoC_API.Applications
 {
     public class ApplicationStatus
     {
-        /*
         [Key]
         public int Id { get; set; }
 
         [Required]
         [StringLength(30)]
         public string Status { get; set; }
-        */
-        public enum Type
+
+        /*public enum Type
         {
             New,
             BackgroundCheckPending,
@@ -24,6 +23,6 @@ namespace Pseudo_MD_DoC_API.Applications
             FailedTest,
             Offer,
             Hired
-        }
+        }*/
     }
 }

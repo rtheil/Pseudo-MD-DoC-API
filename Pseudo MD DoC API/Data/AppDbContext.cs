@@ -14,11 +14,11 @@ namespace Pseudo_MD_DoC_API.Persistence
         public DbSet<Application> Applications { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Configuration> Configuration { get; set; }
+        public DbSet<ApplicationStatus> ApplicationStatus { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             
         }
-
     }
 }

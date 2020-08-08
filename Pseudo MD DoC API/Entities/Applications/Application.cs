@@ -84,7 +84,7 @@ namespace Pseudo_MD_DoC_API.Applications
 
         //POST-APPLICATION INTERNAL INFORMATION
         [Required]
-        public ApplicationStatus.Type ApplicationStatus { get; set; }
+        public ApplicationStatus ApplicationStatus { get; set; }
 
         public int? TestScore { get; set; }
 
