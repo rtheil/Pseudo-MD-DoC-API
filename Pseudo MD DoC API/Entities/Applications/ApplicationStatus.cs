@@ -14,15 +14,5 @@ namespace Pseudo_MD_DoC_API.Applications
         [Required]
         [StringLength(30)]
         public string Status { get; set; }
-
-        /*public enum Type
-        {
-            New,
-            BackgroundCheckPending,
-            TestPending,
-            FailedTest,
-            Offer,
-            Hired
-        }*/
     }
 }

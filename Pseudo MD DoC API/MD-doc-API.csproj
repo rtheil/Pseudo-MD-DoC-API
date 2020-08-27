@@ -78,6 +78,8 @@
     <Compile Remove="Migrations\20200801024928_text-m.Designer.cs" />
     <Compile Remove="Migrations\20200808032434_change-appStatus.cs" />
     <Compile Remove="Migrations\20200808032434_change-appStatus.Designer.cs" />
+    <Compile Remove="Migrations\20200827212835_test-migration.cs" />
+    <Compile Remove="Migrations\20200827212835_test-migration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
