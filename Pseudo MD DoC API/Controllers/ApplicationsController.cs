@@ -32,7 +32,11 @@ namespace Pseudo_MD_DoC_API.Controllers
             _mapper = mapper;
             _applicationService = applicationService;
             _userService = userService;
-            //bool admin = _userService.isAdmin(int.Parse(User.Identity.Name));
+        }
+
+        private bool getAdminStatus()
+        {
+            return _userService.isAdmin(int.Parse(User.Identity.Name));
         }
 
         // GET: api/Applications
@@ -81,6 +85,20 @@ namespace Pseudo_MD_DoC_API.Controllers
             }
         }
 
+        [HttpPut("status")]
+        public async Task<IActionResult> UpdateApplicationStatus([FromBody] ApplicationStatusModel applicationStatus)
+        {
+            try
+            {
+                var application = await _applicationService.UpdateStatus(applicationStatus);
+                return Ok(application);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         // PUT: api/Applications/5
         //TODO: Move to application service
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -88,6 +106,7 @@ namespace Pseudo_MD_DoC_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutApplication(int id, Applications.Application application)
         {
+            throw new NotImplementedException();
             if (id != application.Id)
             {
                 return BadRequest();
