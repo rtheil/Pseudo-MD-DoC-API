@@ -129,6 +129,7 @@ namespace Pseudo_MD_DoC_API.Services
                 .Include(a => a.Education)
                 .Include(a => a.References)
                 .Include(a => a.Employment)
+                .Include(a => a.User)
                 .Include(a => a.ApplicationStatus)
                 .SingleAsync(a => a.Id == status.Id);
             
