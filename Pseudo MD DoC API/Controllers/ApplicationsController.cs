@@ -99,6 +99,20 @@ namespace Pseudo_MD_DoC_API.Controllers
             }
         }
 
+        [HttpGet("status")]
+        public async Task<IActionResult> GetApplicationStatuses()
+        {
+            try
+            {
+                var statuses = await _context.ApplicationStatus.ToListAsync();
+                return Ok(statuses);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         // PUT: api/Applications/5
         //TODO: Move to application service
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
