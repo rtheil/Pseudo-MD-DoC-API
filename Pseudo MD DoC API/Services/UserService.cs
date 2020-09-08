@@ -168,11 +168,11 @@ namespace Pseudo_MD_DoC_API.Services
                 User user = _context.Users.Single(x => x.ResetPasswordToken == token.Token && x.ResetPasswordExpires > DateTime.Now);
 
                 //reset the token and save
-                user.ResetPasswordToken = null;
-                user.ResetPasswordExpires = null;
+                //user.ResetPasswordToken = null;
+                //user.ResetPasswordExpires = null;
 
-                _context.Users.Update(user);
-                _context.SaveChanges();
+                //_context.Users.Update(user);
+                //_context.SaveChanges();
             }
             catch
             {
