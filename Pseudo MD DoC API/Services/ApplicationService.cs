@@ -108,7 +108,7 @@ namespace Pseudo_MD_DoC_API.Services
             saveApplication.User = user;
 
             //find application status
-            var appStatus = await _context.ApplicationStatus.SingleAsync(a=> a.Id==application.ApplicationStatusId);
+            var appStatus = await _context.ApplicationStatus.SingleOrDefaultAsync(a => a.Id == 1);
             saveApplication.ApplicationStatus = appStatus;
 
             //ADD
