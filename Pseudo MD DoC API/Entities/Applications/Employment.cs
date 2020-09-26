@@ -12,6 +12,7 @@ namespace Pseudo_MD_DoC_API.Applications
         public int Id { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string EmployerName { get; set; }
 
         [Required]
@@ -24,6 +25,7 @@ namespace Pseudo_MD_DoC_API.Applications
         public string Phone { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string Position { get; set; }
 
         [Required]

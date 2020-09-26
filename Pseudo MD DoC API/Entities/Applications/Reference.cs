@@ -12,24 +12,19 @@ namespace Pseudo_MD_DoC_API.Applications
         public int Id { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Phone]
         [Required]
         public string PhoneNumber 
         {
-            /*
-            get 
-            {
-                string outPhone = String.Format("{0:###-###-####}", PhoneNumber);
-                return outPhone; 
-            }
-            set { PhoneNumber = value; } 
-            */
             get;
             set;
         }
 
+        [Required]
+        [StringLength(30)]
         public string Relation { get; set; }
     }
 }
