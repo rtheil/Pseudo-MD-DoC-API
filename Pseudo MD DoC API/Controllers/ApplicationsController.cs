@@ -26,7 +26,7 @@ namespace Pseudo_MD_DoC_API.Controllers
         private readonly IApplicationService _applicationService;
         private readonly IUserService _userService;
 
-        public ApplicationsController(AppDbContext context, IMapper mapper,IApplicationService applicationService, IUserService userService)
+        public ApplicationsController(AppDbContext context, IMapper mapper, IApplicationService applicationService, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
@@ -48,7 +48,7 @@ namespace Pseudo_MD_DoC_API.Controllers
                 var applications = await _applicationService.GetAll();
                 return Ok(applications);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
@@ -158,7 +158,10 @@ namespace Pseudo_MD_DoC_API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                //if (ex.InnerException != null)
+                //return BadRequest(new { message = ex.InnerException });
+                //else
+                return BadRequest(new { message = ex.Message, innerException = ex.InnerException.ToString() });
             }
         }
 
