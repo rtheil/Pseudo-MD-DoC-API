@@ -17,7 +17,7 @@ namespace Pseudo_MD_DoC_API.Services
         public Task<IEnumerable<ApplicationOutputModel>> GetAll(User user);
         public Task<ApplicationOutputModel> GetById(int id);
         public Task<ApplicationOutputModel> Create(ApplicationSaveModel application);
-        public Task<ApplicationOutputModel> Update(ApplicationSaveModel application);
+        //public Task<ApplicationOutputModel> Update(ApplicationSaveModel application);
         public Task Delete(int id);
         public Task<ApplicationOutputModel> UpdateStatus(ApplicationStatusModel application);
     }
@@ -118,10 +118,12 @@ namespace Pseudo_MD_DoC_API.Services
             return _mapper.Map<ApplicationOutputModel>(saveApplication);
         }
 
+        /*
         public async Task<ApplicationOutputModel> Update(ApplicationSaveModel application)
         {
             return new ApplicationOutputModel();//TESTING ONLY
         }
+        */
 
         public async Task<ApplicationOutputModel> UpdateStatus(ApplicationStatusModel status)
         {
