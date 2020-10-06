@@ -117,6 +117,7 @@ namespace Pseudo_MD_DoC_API.Controllers
         //TODO: Move to application service
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /*
         [HttpPut("{id}")]
         public async Task<IActionResult> PutApplication(int id, Applications.Application application)
         {
@@ -145,7 +146,7 @@ namespace Pseudo_MD_DoC_API.Controllers
             }
 
             return NoContent();
-        }
+        }*/
 
         // POST: api/Applications
         [HttpPost]
